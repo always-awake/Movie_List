@@ -3,10 +3,6 @@ import './App.css';
 import Movie from './Movie';
 
 //자식 컴포넌트에게 던져줄 데이터를 저장하는 배열이다.
-const movies = [
-
-]
-
 
 
 
