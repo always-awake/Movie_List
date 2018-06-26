@@ -14,46 +14,42 @@ class App extends Component {
   }
 
   componentDidMount(){
-    //setTimeout(function(){A}, B)은 B시간 후에 A작업(함수)을 수행시킨다는 의미이다.
-    //setTimeout(() => {A}, B) 같은 의미이다.
-    setTimeout(() => {
-      this.setState({
-            //자식 컴포넌트에게 던져줄 데이터를 저장하는 배열이다.
-        movies: [
-          {
-            title: "A",
-            poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvDeaFigARYsk5br4eRZpYsShV_W3o1tP-bJsZtay3p3gHV1oCvg"
-          },
-          {
-            title: "B",
-            poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdBMNAiNcY0svwf-PbgaaxRoBoQfAqKU9j_D1xSISa4hw-HExe"
-          },  
-          {
-            title: "C",
-            poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzQQyELeg2UEu0BWuiR8253WKVdDqrpHD0BzTfm6PK9jF8mDBOnA"
-          },
-          {
-            title: "D",
-            poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD3M1nKRdp5IEj9XJGTBXLZ6aNzCFSIb3JRO95m0XHVFoTYMo-wg"
-          },
-          {
-            title: "E",
-            poster:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5gg1322XX08ATpBCgLDJugxYUw7-qz6MEvMkoDhmnlbHm460n"
-          }
-        ]
-      })
-    }, 5000)
+    this._getMovies();
   }
 
+  
   _renderMovies = () => {
       //map 함수는 각각의 고유한 props를 갖고 있는 <Movie />들의 배열을 출력한다.
-    const movies = this.state.movies.map((movie, index) => {
+    const movies = this.state.movies.map((movie) => {
       //index는 현재 cycle 상황에서 movie 안에 들어온 argument의 index이다.
       //즉, movie의 리스트 속 index
       //복수의 child 컴포넌트는 각각 고유한 key값을 갖어야한다.
-      return <Movie title={movie.title} poster={movie.poster} key={index} />
+      return <Movie title={movie.title} poster={movie.large_cover_image} key={movie.id} />
     })
     return movies
+  }
+
+  _getMovies = async () => {
+    //await = callApi()가 끝날 때까지 기다린다(성공여부와 상관없이)
+    //callApi()가 return한 값을 movies 배열안에 대입한다.
+    const movies = await this._callApi();
+    console.log(movies)
+    this.setState({
+      movies : movies
+    })
+  }
+  
+  _callApi = () => {
+    //fetch는 url을 AJAX로 불러올 수 있다는 장점이 있다.
+    return fetch('https://yts.am/api/v2/list_movies.json?sort_by=download_count?sort_by=rating')
+    //fetch작업이 끝나면(성공적 수행이 아니더라도), then을 불러온다.
+    //fetch 작업이 완료되면, fetch된 값을 reponser에 저장하고, 0101 바이너라 코드로 된
+    // response를 json으로 변형해준다.
+    .then(response => response.json()) 
+    //=> : return 의미가 내재되어 있는 표현법이다.(최신 자바스크립트 문법)
+    .then(json => json.data.movies)
+    //fetch작업이 에러가 난다면, catch를 실행시키고, console에 err를 표시
+    .catch(err => console.log(err))
   }
 
   render() {
