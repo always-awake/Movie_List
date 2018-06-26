@@ -1,44 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './Movie.css';
 
-
-//컴포넌트는 항상 render을 해야한다. = 컴포넌트는 항상 render()함수를 갖고 있어야 한다.//
-//컴포넌트 생성 > 렌터 > 리턴 > JSX (html과 유사) 
-
-class Movie extends Component{
-    //App(father)이 보내준 props가 Movie(child)가 원하는 데이터 tpye인지 체크하는 부분
-    //보내준 props type과 원하는 props type이 다르다면, console에서 Error 메세지가 뜬다. 
-    static propTypes = {
-        //"title props는 string type으로만 출력한다."의미
-        title: PropTypes.string.isRequired,
-        poster: PropTypes.string
-    }
-    //child component에서 father component가 준 props에 접근하는 방법
-    // -> By calling '{this.props.~}'
-    render(){
-        return(
-            <div>
-            <MoviePoster poster={this.props.poster}/>           
-            <h1>{this.props.title}</h1>
-            </div>
-        );
-    }
+//이미 처음부터 props를 사용하기 때문에 this.~ 가 필요없다.
+function Movie({title, poster}){
+    return (
+        <div>
+        <MoviePoster poster={poster} />
+        <h1>{title}</h1>
+        </div>
+    )
 }
 
-class MoviePoster extends Component{
-    //Movie(father)이 보내준 props가 MoviePoster(child)가 원하는 데이터 tpye인지 체크하는 부분
-    //보내준 props type과 원하는 props type이 다르다면, console에서 Error 메세지가 뜬다. 
-    static propTypes = {
-        poster: PropTypes.string
-    }
+Movie.propTypes = {
+    title: PropTypes.string.isRequired,
+    poster: PropTypes.string.isRequired
+}
 
-    render(){
-        return(
-            //{}속에 해당 porps를 지정해줘야한다.    
-            <img src={this.props.poster} alt="Movie Poster" />
-        );
-    }
+//Dumb Component: state가 없는 컴포넌트
+//return만을 위한 컴포넌트이다.
+//컴포넌트 lifecycle이 없다. 또한 functional render도 없다.
+function MoviePoster({poster}){
+    return (
+        <img src={poster} alt="Movie Poster" />
+    )
+}
+
+
+
+//Dumb Component에서 PropTypes를 설정하는 방법
+MoviePoster.propTypes = {
+    poster: PropTypes.string.isRequired
 }
 
 
