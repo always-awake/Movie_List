@@ -21,15 +21,13 @@ class App extends Component {
   _renderMovies = () => {
       //map 함수는 각각의 고유한 props를 갖고 있는 <Movie />들의 배열을 출력한다.
     const movies = this.state.movies.map(movie => {
-      console.log(movie)
-      console.log(movie.genres)
       //index는 현재 cycle 상황에서 movie 안에 들어온 argument의 index이다.
       //즉, movie의 리스트 속 index
       //복수의 child 컴포넌트는 각각 고유한 key값을 갖어야한다.
       return (
         <Movie 
           title={movie.title_english} 
-          poster={movie.medium_cover_image} 
+          poster={movie.large_cover_image} 
           key={movie.id} 
           genres={movie.genres}
           synopsis={movie.synopsis} 
@@ -63,10 +61,12 @@ class App extends Component {
   }
 
   render() {
-    return (     
+    const {movies} = this.state;
+
+    return (
       //React에서 자바스크립트 속 html과 유사한 이 문법을 JSX라고 부른다.//
       //JSX는 리액트 컴포넌트를 만들 때 사용하는 언어이다.//
-      <div className="App">
+      <div className={movies ? "App":"App--loading"}>
         {this.state.movies ? this._renderMovies() : 'Loading'}
       </div>
     );

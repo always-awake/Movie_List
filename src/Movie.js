@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import LinesEllipsis from 'react-lines-ellipsis';
 import './Movie.css';
 
 //이미 처음부터 props를 사용하기 때문에 this.~ 가 필요없다.
 function Movie({title, poster, genres, synopsis}){
-    console.log(genres)
     return (
         <div className="Movie">
 
@@ -19,9 +19,15 @@ function Movie({title, poster, genres, synopsis}){
                     {genres.map((genre, index) => <MovieGenre genre={genre} key={index} />)}
                 </div>
                 
-                <p className="Movie__Synopsis">
-                    {synopsis}
-                </p>
+                <div className="Movie__Synopsis">
+                <LinesEllipsis
+                    text={synopsis}
+                    maxLine='5'
+                    ellipsis='--more--'
+                    trimRight
+                    basedOn='letters'
+                    />   
+                </div>
             </div>
         </div>
     );
